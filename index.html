@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Convolutional Layer Visualizer</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Convolutional Layer Visualizer</h1>
+    <p class="tagline">See how RGB channels combine through K 3×3 kernels to produce output feature maps.</p>
+  </header>
+
+  <section class="controls">
+    <div class="control-group">
+      <label for="imageFile">Image</label>
+      <input id="imageFile" type="file" accept="image/*" />
+      <button id="useSample">Use sample</button>
+    </div>
+
+    <div class="control-group">
+      <label for="kernelsRange">Number of kernels</label>
+      <input id="kernelsRange" type="range" min="1" max="8" step="1" value="4" />
+      <span id="kernelsCount">4</span>
+    </div>
+
+    <div class="control-group">
+      <label for="kernelSet">Kernel set</label>
+      <select id="kernelSet">
+        <option value="random" selected>Random normalized</option>
+        <option value="classic">Classic filters (edge/blur/sharpen/sobel)</option>
+      </select>
+      <button id="randomizeKernels">Randomize</button>
+    </div>
+  </section>
+
+  <main>
+    <section class="panel">
+      <h2>Input image</h2>
+      <canvas id="imageCanvas" width="256" height="256"></canvas>
+    </section>
+
+    <section class="panel">
+      <h2>RGB channels (grayscale)</h2>
+      <div class="grid grid-3" id="rgbChannels">
+        <figure>
+          <figcaption>Red</figcaption>
+          <canvas id="rCanvas" width="256" height="256"></canvas>
+        </figure>
+        <figure>
+          <figcaption>Green</figcaption>
+          <canvas id="gCanvas" width="256" height="256"></canvas>
+        </figure>
+        <figure>
+          <figcaption>Blue</figcaption>
+          <canvas id="bCanvas" width="256" height="256"></canvas>
+        </figure>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Kernels (3×3×3)</h2>
+      <div id="kernelsContainer" class="kernels-container"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Output feature maps (K)</h2>
+      <div id="outputsContainer" class="grid grid-auto"></div>
+    </section>
+
+    <section class="panel" id="practicePanel">
+      <h2>Practice: compute the outputs</h2>
+      <p class="tagline">Below is a small RGB image (downsampled) and a randomly initialized set of K 3×3×3 kernels. Copy the NumPy code, compute the K outputs with stride=1 and no padding, then click “Reveal results” to check.</p>
+
+      <div class="controls" style="margin: 8px 0 12px;">
+        <div class="control-group">
+          <button id="practiceRegenerate">Regenerate</button>
+          <button id="practiceReveal">Reveal results</button>
+        </div>
+        <div class="control-group">
+          <button id="copyCode">Copy NumPy code</button>
+        </div>
+      </div>
+
+      <div class="grid grid-3" id="practiceChannels">
+        <figure>
+          <figcaption>Practice — Red</figcaption>
+          <canvas id="pR" width="128" height="128"></canvas>
+        </figure>
+        <figure>
+          <figcaption>Practice — Green</figcaption>
+          <canvas id="pG" width="128" height="128"></canvas>
+        </figure>
+        <figure>
+          <figcaption>Practice — Blue</figcaption>
+          <canvas id="pB" width="128" height="128"></canvas>
+        </figure>
+      </div>
+
+  <h3 style="margin-top:14px; font-size:14px;">Image matrices (R, G, B)</h3>
+  <div id="practiceImageMatrices" class="grid grid-3"></div>
+
+  <h3 style="margin-top:14px; font-size:14px;">Practice kernels (3)</h3>
+  <div id="practiceKernelMatrices" class="kernels-container"></div>
+
+      <h3 style="margin-top:14px; font-size:14px;">Practice outputs</h3>
+      <div id="practiceOutputs" class="grid grid-auto" style="display:none;"></div>
+    </section>
+  </main>
+
+  <footer>
+    <small>
+      Tip: Outputs are normalized per-map for visualization. Kernels show negative weights in blue and positive in red.
+    </small>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,197 @@
+* { box-sizing: border-box; }
+:root {
+  --bg: #0e0f12;
+  --panel: #171a21;
+  --text: #e8e8ef;
+  --muted: #a4a7b3;
+  --accent: #7aa2f7;
+  --grid-gap: 12px;
+}
+
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+  background: var(--bg);
+  color: var(--text);
+}
+
+header {
+  padding: 20px 16px 10px;
+}
+header h1 { margin: 0 0 6px; font-weight: 700; font-size: 22px; }
+.tagline { margin: 0; color: var(--muted); font-size: 14px; }
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--grid-gap);
+  padding: 10px 16px 16px;
+  background: #12141a;
+  border-top: 1px solid #1f2430;
+  border-bottom: 1px solid #1f2430;
+}
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.control-group label { color: var(--muted); font-size: 14px; }
+.control-group input[type="range"] { width: 160px; }
+.control-group button {
+  background: #222939;
+  color: var(--text);
+  border: 1px solid #2a3246;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.control-group button:hover { background: #28324a; }
+.checkbox { display: inline-flex; gap: 6px; align-items: center; }
+
+main {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  padding: 16px;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid #1f2430;
+  border-radius: 10px;
+  padding: 12px;
+}
+.panel h2 { margin: 0 0 10px; font-size: 16px; font-weight: 600; }
+
+.grid { display: grid; gap: var(--grid-gap); }
+.grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid-auto { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+
+figure { margin: 0; }
+figcaption { margin: 0 0 8px; color: var(--muted); font-size: 12px; }
+
+canvas {
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+  border-radius: 8px;
+  border: 1px solid #222838;
+  background: #0b0c10;
+}
+
+/* Keep the main input image at its intrinsic pixel size (e.g., 256px) */
+#imageCanvas {
+  width: 256px;    /* display at natural size */
+  max-width: 100%; /* shrink on very small screens */
+  height: auto;
+  display: block;
+  margin: 0;       /* align left; panel column will auto-size */
+}
+
+/* Constrain RGB channel canvases so they don't grow huge */
+#rCanvas, #gCanvas, #bCanvas {
+  width: 100%;           /* let canvases use available column width */
+  max-width: 320px;      /* but cap so they don’t get too huge */
+  height: auto;
+  display: block;
+  margin: 0 auto;        /* center within each grid cell */
+}
+
+.kernels-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--grid-gap); }
+.kernel-card {
+  border: 1px solid #202636;
+  border-radius: 8px;
+  padding: 8px;
+  background: #121623;
+}
+.kernel-title { font-size: 13px; color: var(--muted); margin: 0 0 8px; }
+.kernel-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* stack R, G, B vertically */
+  gap: 8px;
+}
+.kernel-matrix {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  font-size: 12px;
+}
+.kernel-cell {
+  padding: 6px 4px;
+  text-align: center;
+  border-radius: 4px;
+  border: 1px solid #2a3042;
+  color: #000; /* improve contrast on light kernel heat colors */
+}
+.kernel-label { text-align: center; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+
+.legend {
+  display: grid;            /* ensure track sizing works */
+  grid-template-columns: repeat(10, 1fr);
+  height: 10px;
+  width: 100%;              /* take full card width so segments are visible */
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid #2a3042;
+}
+.legend > div {
+  height: 100%;             /* stretch each segment to legend height */
+}
+.legend-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); }
+
+footer { padding: 8px 16px 24px; color: var(--muted); font-size: 12px; }
+
+.code {
+  background: #0f1320;
+  color: #d6deff;
+  border: 1px solid #20263a;
+  border-radius: 8px;
+  padding: 12px;
+  overflow: auto;
+  max-height: 320px;
+  white-space: pre-wrap;   /* allow long lines to wrap to avoid blowing out layout */
+  word-break: break-word;
+}
+
+/* Tabular numeric matrices for practice section */
+.matrix-wrap { overflow: auto; }
+.matrix {
+  border-collapse: collapse;
+  font-size: 11px;
+  background: #0f1117;
+  border: 1px solid #2a3042;
+}
+.matrix td {
+  border: 1px solid #2a3042;
+  padding: 2px 4px;
+  text-align: right;
+  color: var(--text);
+}
+.matrix caption {
+  caption-side: top;
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+@media (min-width: 1000px) {
+  main {
+    /* Let left column size to content (image panel), right fills remaining */
+    grid-template-columns: auto 1fr;
+  }
+  main > .panel:nth-child(3),
+  main > .panel:nth-child(4) {
+    grid-column: 1 / -1;
+  }
+  /* Make RGB channels use 2 columns at medium-large widths to avoid squeezing */
+  #rgbChannels { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1400px) {
+  /* At very wide screens, show all three side-by-side comfortably */
+  #rgbChannels { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* Ensure practice panel spans both columns so its code block doesn't affect left column width */
+main > #practicePanel { grid-column: 1 / -1; }
